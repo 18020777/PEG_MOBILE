@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "paradox",
+    "slug": "paradox",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/transparent-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#161315"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png"
+      },
+      "package": "com.paradox.mobile"
+    },
+    "web": {
+      "favicon": "./assets/transparent-icon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3b68ffc8-35fe-4011-ad4c-ace0405026c9"
+      }
+    },
+    "owner": "paradox-eg"
+  }
+}
