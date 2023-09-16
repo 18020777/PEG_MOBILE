@@ -36,7 +36,7 @@ export default function Login({checkAuth}) {
 
 		const token = tokenJson.token
 		const allowed = await checkAuth(token)
-		if (!allowed) setError("Vous devais être staff pour accéder a l'application")
+		if (!allowed) setError("Vous devez être staff pour accéder a l'application.")
 	}
 
 	return (<View style={styles.container}>
