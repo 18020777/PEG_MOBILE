@@ -3,7 +3,6 @@ import React, {useEffect, useState} from "react";
 import {COLORS} from "../colors";
 import {Storage} from "./Storage";
 import {API_URL, TOKEN_KEY} from "../options";
-import game from "./game/Game";
 import Game from "./game/Game";
 import DefaultText from "./DefaultText";
 
@@ -24,11 +23,12 @@ export default function Games() {
 
 	const fetchGames = async () => {
 		setMessage("")
+		console.log("a")
 		const response = await fetch(
 			API_URL + "booking/?date=" + nowToString(), {
 				headers: {"Authorization": "Token " + await Storage.get(TOKEN_KEY)}
 			})
-		console.log(response.url, response.status)
+
 		if (!response.ok) return
 		const json = await response.json()
 		if (!json || !json.results) return
@@ -42,9 +42,9 @@ export default function Games() {
 
 	return (
 		<View style={styles.container}>
-			{ games.map((game, index) => (
-				<Game key={index} booking={game} />
-			)) }
+			{games.map((game, index) => (
+				<Game key={index} booking={game}/>
+			))}
 			<DefaultText>{message}</DefaultText>
 		</View>
 	);

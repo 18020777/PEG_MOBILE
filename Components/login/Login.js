@@ -1,4 +1,4 @@
-import {Button, Dimensions, StyleSheet, View} from 'react-native';
+import {Button, Dimensions, Image, StyleSheet, View} from 'react-native';
 import React, {useState} from "react";
 import {COLORS} from "../../colors";
 import DefaultText from "../DefaultText";
@@ -16,7 +16,6 @@ export default function Login({checkAuth}) {
 	const submit = async () => {
 		setError("")
 		if (!isUsernameValid || !isPasswordValid) return
-		console.log(API_URL + "token/")
 		const tokenRes = await fetch(API_URL + "token/", {
 			method: "POST",
 			headers: {
@@ -36,11 +35,12 @@ export default function Login({checkAuth}) {
 
 		const token = tokenJson.token
 		const allowed = await checkAuth(token)
-		if (!allowed) setError("Vous devais être staff pour accéder a l'application")
+		if (!allowed) setError("Vous devez être staff pour accéder a l'application.")
 	}
 
 	return (<View style={styles.container}>
 		<View style={styles.titleContainer}>
+			<Image source={require('../../assets/icon.png')} style={styles.logo}/>
 			<DefaultText style={styles.title}>Se connecter à Paradox</DefaultText>
 			<DefaultText>Un Role Staff est Nécessaire</DefaultText>
 			{error && error !== "" ? <DefaultText style={styles.error}>{error}</DefaultText> : <></>}
@@ -82,6 +82,12 @@ const styles = StyleSheet.create({
 	},
 	buttonContainer: {
 		width: "90%",
+	},
+	logo: {
+		width: 60,
+		height: 60,
+		marginBottom: 16,
+		resizeMode: "contain"
 	},
 });
 
