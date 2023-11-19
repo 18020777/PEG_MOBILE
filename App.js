@@ -7,6 +7,16 @@ import Login from "./Components/login/Login";
 import {Storage} from "./Components/Storage";
 import {API_URL, TOKEN_KEY} from "./options";
 import DefaultText from "./Components/DefaultText";
+import {setNotificationHandler} from "expo-notifications";
+import {fetchScenarioTimers} from "./Components/ScenarioManager";
+
+setNotificationHandler({
+	handleNotification: async () => ({
+		shouldShowAlert: true,
+		shouldPlaySound: true,
+		shouldSetBadge: true,
+	}),
+});
 
 export default function App() {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -14,12 +24,11 @@ export default function App() {
 
 
 	const disconnect = async () => {
-		Storage.remove(TOKEN_KEY)
+		await Storage.remove(TOKEN_KEY)
 		setIsAuthenticated(false)
 	}
 
 	const checkAuth = async (token = null) => {
-		console.log("checking auth")
 		let useStorage = false
 		if (!token) {
 			token = await Storage.get(TOKEN_KEY)
@@ -36,6 +45,9 @@ export default function App() {
 			return false
 		}
 		await Storage.set(TOKEN_KEY, token)
+
+		await fetchScenarioTimers()
+
 		setIsAuthenticated(true)
 		return true
 	}
@@ -63,7 +75,6 @@ export default function App() {
 					</View>
 				) : <Login checkAuth={checkAuth}/>
 			}
-
 		</ScrollView>
 	);
 }

@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react'
 import {Button, Modal, StyleSheet, Text, View} from "react-native";
 import DefaultText from "../DefaultText";
 import {COLORS} from "../../colors";
+import {NotificationManager} from "../NotificationManager";
+import {SCENARIOS_TIMES} from "../ScenarioManager";
 
 function secondsToTime(s) {
 	const hours = String(Math.floor(s / 3600)).padStart(2, '0');
@@ -14,6 +16,29 @@ function secondsToTime(s) {
 const Timer = ({game, action}) => {
 	const [timer, setTimer] = useState(0);
 	const [modal, setModal] = useState(false);
+
+	async function start() {
+		setModal(false)
+		const date = new Date(
+			new Date().getTime() +
+			SCENARIOS_TIMES[game.scenario].hour * 60 * 60 * 1000 +
+			SCENARIOS_TIMES[game.scenario].minute * 60 * 1000 +
+			SCENARIOS_TIMES[game.scenario].seconds * 1000
+		)
+		await NotificationManager.scheduleNotification(
+			game.id.toString(),
+			"Fin de la Partie #" + game.id,
+			`Le temps de la partie #${game.id} Salle ${game.room} est écoulé !`,
+			date
+		)
+		action("start_game")
+	}
+
+	async function stop() {
+		setModal(false)
+		await NotificationManager.cancelNotification(game.id.toString())
+		action("end_game")
+	}
 
 	useEffect(() => {
 		setModal(false)
@@ -57,9 +82,9 @@ const Timer = ({game, action}) => {
 					<View style={styles.modalButtons}>
 						<DefaultText onPress={() => setModal(false)}>Annuler</DefaultText>
 						{game.start_time ? (
-							<Button title="Arrêter" color="crimson" onPress={() => action("end_game")}/>
+							<Button title="Arrêter" color="crimson" onPress={stop}/>
 						) : (
-							<Button title="Commencer" color={COLORS.primary} onPress={() => action("start_game")}/>
+							<Button title="Commencer" color={COLORS.primary} onPress={start}/>
 						)}
 					</View>
 				</View>
