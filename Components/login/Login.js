@@ -16,7 +16,6 @@ export default function Login({checkAuth}) {
 	const submit = async () => {
 		setError("")
 		if (!isUsernameValid || !isPasswordValid) return
-		console.log(API_URL + "token/")
 		const tokenRes = await fetch(API_URL + "token/", {
 			method: "POST",
 			headers: {

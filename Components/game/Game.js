@@ -26,7 +26,6 @@ const Game = ({booking}) => {
 				action: action
 			})
 		})
-		console.log(res.ok, res.status, await res.text())
 		await refresh()
 	}
 
@@ -38,10 +37,7 @@ const Game = ({booking}) => {
 		})
 		if (!response.ok) return
 		const json = await response.json()
-		if (json) {
-			console.log("refresh:", json)
-			setGame(json)
-		}
+		if (json) setGame(json)
 	}
 
 	useEffect(() => {
