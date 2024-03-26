@@ -4,11 +4,13 @@ import DefaultText from "../DefaultText";
 import {AntDesign} from "@expo/vector-icons";
 import {COLORS} from "../../colors";
 
+// Transform the time string from "HH:MM" to "HHhMM"
 function transformTimeString(string) {
 	const split = string.split(":")
 	return split[0] + "h" + split[1]
 }
 
+// Dropdown Button Component to display the game time and room
 const DropdownButton = ({game, active, isOpen, onTouch}) => {
 	return (
 		<View style={styles.container} onTouchEnd={onTouch}>

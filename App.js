@@ -18,32 +18,41 @@ setNotificationHandler({
 	}),
 });
 
+// Main App Component
 export default function App() {
+	// State variables for authentication and refreshing
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [refreshing, setRefreshing] = useState(false);
 
 
+	// Function to disconnect the user
 	const disconnect = async () => {
 		await Storage.remove(TOKEN_KEY)
 		setIsAuthenticated(false)
 	}
 
+	// Function to check if the user is authenticated
 	const checkAuth = async (token = null) => {
+		// Check if the token is in the storage
 		let useStorage = false
 		if (!token) {
+			// Get the token from the storage
 			token = await Storage.get(TOKEN_KEY)
 			if (!token) return false
 			useStorage = true
 		}
 
+		// Check if the user is staff
 		const response = await fetch(API_URL + "is_staff/", {
 			headers: {"Authorization": "Token " + token}
 		})
+		// If the user is not staff, remove the token from the storage
 		const json = await response.json()
 		if (!json || !json.is_staff) {
 			if (useStorage) Storage.remove(TOKEN_KEY)
 			return false
 		}
+		// If the user is staff, set the token in the storage and fetch the scenario timers
 		await Storage.set(TOKEN_KEY, token)
 
 		await fetchScenarioTimers()
@@ -52,16 +61,22 @@ export default function App() {
 		return true
 	}
 
+	// Check if the user is authenticated when the app is loaded
 	useEffect(() => {
 		checkAuth()
 	}, [])
 
+	// Function to refresh the app
+	// This function is called when the user pulls down the screen
 	const onRefresh = async () => {
+		// Set the refreshing state to true
 		setRefreshing(true);
+		// Check if the user is authenticated
 		await checkAuth()
 		setRefreshing(false)
 	};
 
+	// Return the app screen
 	return (
 		<ScrollView refreshControl={
 			<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
